@@ -2,7 +2,7 @@
 
 
 
-1) installer wsl2 Ubuntu avec le manuel d'installation de wsl2
+1) installer wsl2 Ubuntu avec le manuel d'installation de wsl2 : https://github.com/Michelboissac/install_wsl2_conda
 , puis ouvrir ubuntu, installer conda, et creer l'environnement conda TOOLS_env :
 
 conda create --yes -n TOOLS_env -c bioconda -c conda-forge \
