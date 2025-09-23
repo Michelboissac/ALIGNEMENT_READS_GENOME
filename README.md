@@ -48,3 +48,7 @@ COMMANDES UTILES LINUX:
 
     pour se deplacer dans un un dossier:
     cd /mnt/c/dossier1/dossier2/etc
+
+
+
+pour analyser une matrice d'alignement : https://github.com/Michelboissac/ANALYSE_MATRICE_ALIGNEMENT
