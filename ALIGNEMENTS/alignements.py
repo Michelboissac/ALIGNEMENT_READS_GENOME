@@ -45,8 +45,8 @@ if 'param1_value' not in st.session_state:
     st.session_state.param1_value = ""
 if 'param2_value' not in st.session_state:
     st.session_state.param2_value = ""
-if 'param5_value' not in st.session_state:
-    st.session_state.param5_value = ""
+if 'param4_value' not in st.session_state:
+    st.session_state.param4_value = ""
 
 # Param1 - Dossier de travail
 col1, col2 = st.columns([4, 1])
@@ -87,25 +87,48 @@ with col4:
             st.session_state.param2_value = converted_path
             st.rerun()
 
-# Param3 & 4 - URLs (pas de sélecteur de dossier)
-param3 = st.text_input(
-    "URL genome fasta", 
-    value="https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/254/395/GCF_003254395.2_Amel_HAv3.1/GCF_003254395.2_Amel_HAv3.1_genomic.fna.gz"
-)
-param4 = st.text_input(
-    "URL genome gtf", 
-    value="https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/254/395/GCF_003254395.2_Amel_HAv3.1/GCF_003254395.2_Amel_HAv3.1_genomic.gtf.gz"
+# Param3 - URLs avec menu déroulant
+genome_options = {
+    "Apis mellifera": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/254/395/GCF_003254395.2_Amel_HAv3.1/GCF_003254395.2_Amel_HAv3.1_genomic",
+    "Drosophila melanogaster": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/215/GCF_000001215.4_Release_6_plus_ISO1_MT/GCF_000001215.4_Release_6_plus_ISO1_MT_genomic",
+    "Varroa destructor": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/443/255/GCF_002443255.2_Vdes_3.0/GCF_002443255.2_Vdes_3.0_genomic",
+    "Mus musculus": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/635/GCF_000001635.27_GRCm39/GCF_000001635.27_GRCm39_genomic",
+    "Human": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/GCF_000001405.40_GRCh38.p14/GCF_000001405.40_GRCh38.p14_genomic",
+    "Vespa velutina": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/912/470/025/GCF_912470025.1_iVesVel2.1/GCF_912470025.1_iVesVel2.1_genomic",
+    "Monomorium pharaonis": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/013/373/865/GCF_013373865.1_ASM1337386v2/GCF_013373865.1_ASM1337386v2_genomic",
+    "Aphis gossypii": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/020/184/175/GCF_020184175.1_ASM2018417v2/GCF_020184175.1_ASM2018417v2_genomic",
+    "Autre (saisir URL)": ""
+}
+
+genome_choice = st.selectbox(
+    "Sélectionner le génome",
+    options=list(genome_options.keys()),
+    index=0
 )
 
+if genome_choice == "Autre (saisir URL)":
+    param3 = st.text_input(
+        "URL genome personnalisée",
+        placeholder="Entrez l'URL du génome"
+    )
+else:
+    param3 = genome_options[genome_choice]
+    st.text_input(
+        "URL genome",
+        value=param3,
+        disabled=True,
+        key="genome_url_display"
+    )
 
-# Param5 - Dossier reads
+
+# param4 - Dossier reads
 col5, col6 = st.columns([4, 1])
 with col5:
-    param5 = st.text_input(
+    param4= st.text_input(
         "Dossier reads (ou telecharger)", 
-        value=st.session_state.param5_value,
+        value=st.session_state.param4_value,
         placeholder="telecharger OU /mnt/c/etc/dossier_travail/reads/",
-        key="param5_input"
+        key="param4_input"
     )
 with col6:
     st.write("")
@@ -118,25 +141,25 @@ with col6:
             st.rerun()
 
 # Paramètres restants
-param6 = st.text_input(
+param5 = st.text_input(
     "Nom base projet", 
     placeholder="PRJ_xxxxxxx_Ovaries    > créer un sous dossier : /mnt/c/etc/dossier_travail/PRJ_xxxxxxx_Ovaries/"
 )
-param7 = st.text_input(
+param6 = st.text_input(
     "Liste SRA", 
     placeholder='laisser "" si on telecharge les SRA, sinon :"SRRXXXXXX1 SRRXXXXXX2" mettre "" autour'
 )
-param8 = st.text_input(
+param7 = st.text_input(
     "Technologie de séquençage short long", 
     placeholder="short ou long"
 )
-param9 = st.text_input(
+param8 = st.text_input(
     "Single or pair end ?", 
     placeholder="single ou pair"
 )
 
 if st.button("Launch Analysis"):
-    cmd = f"bash alignement.sh {param1} {param2} {param3} {param4} {param5} {param6} {param7} {param8} {param9}"
+    cmd = f"bash alignement.sh {param1} {param2} {param3} {param4} {param5} {param6} {param7} {param8} "
     try:
         result = subprocess.run(
             cmd,

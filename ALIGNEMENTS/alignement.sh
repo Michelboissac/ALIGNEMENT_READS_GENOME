@@ -1,19 +1,23 @@
 DOSSIER_TRAVAIL=$1
 DOSSIER_GENOME_TRAVAIL=$2
-url_genome_fna=$3
-url_genome_gtf=$4
+url_genome=$3
 
-
-DOSSIER_READS_TRAVAIL=$5
-NOM_BASE_PROJET=$6
-liste_sra_a_telecharger=$7
-technologie_de_sequencage=$8
-single_or_pair_end=$9
+DOSSIER_READS_TRAVAIL=$4
+NOM_BASE_PROJET=$5
+liste_sra_a_telecharger=$6
+technologie_de_sequencage=$7
+single_or_pair_end=$8
 
 
 
 
 #####################################################################
+
+url_genome_fna=${url_genome}.fna.gz
+url_genome_gtf=${url_genome}.gtf.gz
+
+
+
 #Creation du dossier des travails , et des sous dossiers
 cd --
 #nom de la matrice d'alignement :
