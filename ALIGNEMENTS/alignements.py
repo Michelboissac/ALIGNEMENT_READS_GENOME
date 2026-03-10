@@ -1,6 +1,12 @@
 import streamlit as st
 import subprocess
 import re
+from pathlib import Path
+
+SCRIPT_DIR = Path(__file__).resolve().parent
+ALIGN_SCRIPT = SCRIPT_DIR / "alignement.sh"
+
+
 
 def convert_to_wsl_path(path):
     """Convertit un chemin Windows en chemin WSL"""
@@ -57,9 +63,13 @@ param2_raw = st.text_input(
     placeholder='telecharger OU /mnt/c/etc/genome/ ou C:\\Users\\...',
     key="param2_input"
 )
-param2 = convert_to_wsl_path(param2_raw)
-if param2_raw and param2 != param2_raw:
-    st.caption(f"✓ Converti en : `{param2}`")
+param2 = param2_raw
+
+if param2_raw and param2_raw != "telecharger":
+    param2 = convert_to_wsl_path(param2_raw)
+
+    if param2 != param2_raw:
+        st.caption(f"✓ Converti en : `{param2}`")
 
 # Param3 - Sélection du génome
 genome_options = {
@@ -97,9 +107,13 @@ param4_raw = st.text_input(
     placeholder='telecharger OU /mnt/c/etc/reads/ ou C:\\Users\\...',
     key="param4_input"
 )
-param4 = convert_to_wsl_path(param4_raw)
-if param4_raw and param4 != param4_raw:
-    st.caption(f"✓ Converti en : `{param4}`")
+param4 = param4_raw
+if param4_raw != "telecharger":
+    param4 = convert_to_wsl_path(param4_raw)
+
+    if param4 != param4_raw:
+        st.caption(f"✓ Converti en : `{param4}`")
+
 
 # Paramètres restants
 param5 = st.text_input(
@@ -159,7 +173,7 @@ if st.button("Launch Analysis", type="primary"):
         # Construction de la commande
         # Note: param3 contient l'URL de base sans extension
         # Votre script bash devra ajouter .fna.gz et .gtf.gz
-        cmd = f'bash alignement.sh "{param1}" "{param2}" "{param3}" "{param4}" "{param5}" "{param6}" "{param7}" "{param8}"'
+        cmd = f'bash "{ALIGN_SCRIPT}" "{param1}" "{param2}" "{param3}" "{param4}" "{param5}" "{param6}" "{param7}" "{param8}"'
         
         st.info(f"🚀 Lancement de l'analyse...")
         st.code(cmd, language="bash")
